@@ -1,0 +1,29 @@
+{
+  "name": "node_ecommerce_docker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon -r esm server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kmobin/Node_Ecommerce_Docker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kmobin/Node_Ecommerce_Docker/issues"
+  },
+  "homepage": "https://github.com/kmobin/Node_Ecommerce_Docker#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "esm": "^3.2.25",
+    "express": "^4.18.2",
+    "joi": "^17.10.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0"
+  }
+}
