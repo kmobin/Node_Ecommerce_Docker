@@ -14,6 +14,9 @@ db.once('open', () => {
 });
 
 app.use(express.json())
+app.get('/hello',(req,res)=>{
+    res.json({message: 'Hello World'})
+})
 app.use('/api',routes)
 app.use(errorHandler)
 
