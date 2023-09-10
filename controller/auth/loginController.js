@@ -26,7 +26,7 @@ const loginController = {
             const match = await bcrypt.compare(req.body.password,user.password) 
 
             if(!match)
-                return next(CustomeErrorHandler.unAuthorized('Unauthorized'))
+                return next(CustomeErrorHandler.wrongCredential('Username or password is wrong'))
              
             const access_token =  JwtService.sign({_id: user._id, role: user.role}) 
             
