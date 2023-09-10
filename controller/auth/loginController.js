@@ -1,6 +1,6 @@
 import Joi from "joi"
 import bcrypt from 'bcrypt'
-import { User } from "../../models/index.js"
+import { RefreshToken, User } from "../../models/index.js"
 import CustomeErrorHandler from "../../services/CustomeErrorHandler.js"
 import JwtService from "../../services/JwtService.js"
 import { REFRESH_SECRET } from "../../config/index.js"
@@ -42,6 +42,23 @@ const loginController = {
           }
 
 
+    },
+    async logout(req, res, next) {
+        const refreshSchema = Joi.object({
+            refresh_token: Joi.string().required()
+        })
+        try{
+
+            const {error} = refreshSchema.validate(req.body)
+            if(error)
+                return next(error)
+
+            await RefreshToken.deleteOne({ token: req.body.refresh_token})
+
+            res.json({status : 1})
+        }catch(e){
+            return next(e)
+        }
     }
 }
 
