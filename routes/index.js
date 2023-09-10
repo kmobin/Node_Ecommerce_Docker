@@ -9,6 +9,7 @@ routes.post('/register',registerController.register)
 routes.post('/login',loginController.login)
 routes.get('/me',auth,userController.me)
 routes.post('/refresh',refreshController.refresh)
+routes.post('/logout',auth,loginController.logout)
 
 
 export default routes
