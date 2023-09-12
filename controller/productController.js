@@ -3,6 +3,8 @@ import { Products } from "../models/index.js"
 import path from 'path'
 import Joi from "joi"
 import fs from 'fs'
+import CustomeErrorHandler from "../services/CustomeErrorHandler.js"
+import productSchema from "../validator/product.js"
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -22,14 +24,10 @@ const productController = {
             if(err){
                 return next(e)
             }
-            console.log(req.file)
+            if(!req.file)
+                return next(CustomeErrorHandler.internalServer('Image Missing'))
+            
             const filePath = req.file.path 
-
-            const productSchema = Joi.object({
-                name: Joi.string().required(),
-                price: Joi.number().required(),
-                size: Joi.string().required()
-            })
 
             const { error } = productSchema.validate(req.body)
             if(error){
@@ -58,6 +56,59 @@ const productController = {
             res.status(201).json(document)
         })
 
+    },
+    async update(req, res, next) {
+
+        handleMultipartData(req, res, async(err)=>{
+            if(err)
+                return next(err)
+            
+            const {error} = await productSchema.validate(req.body)
+            if(error){
+                if(req.file){
+                    fs.unlink(`${appRoot}/${req.file.path}`, (err)=>{
+                        if(err)
+                            return next(err)
+                    })
+                }
+                return next(error)
+            }
+
+            const {name ,price, size} = req.body
+            let document
+            try{    
+                document = await Products.findByIdAndUpdate({_id : req.params.id},
+                    {
+                        name,
+                        price,
+                        size,
+                        ...(req.file && {image: req.file.path})
+                    },{new: true})
+
+            }catch(e){
+                return next(e)
+            }
+            res.status(201).json(document)
+        })
+
+    },
+    async destroy(req, res, next){
+        try{
+            const document = await Products.findOneAndRemove({_id: req.params.id})
+            
+            if(!document)
+                return next(CustomeErrorHandler.internalServer('Record not found!'))
+            
+            fs.unlink(`${appRoot}/${document.image}`,(err)=>{
+                if(err)
+                    return next(err)
+            })
+
+            res.status(201).json(document)    
+
+        }catch(e){
+            return next(e)
+        }
     }
 }
 
