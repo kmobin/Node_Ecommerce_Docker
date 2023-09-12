@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import userController from "../controller/auth/userController.js";
 import { registerController, loginController, refreshController, productController} from "../controller/index.js";
 import admin from "../middleware/admin.js";
@@ -15,6 +15,8 @@ routes.post('/logout',auth,loginController.logout)
 routes.post('/products',[auth,admin], productController.store)
 routes.put('/products/:id',[auth,admin], productController.update)
 routes.delete('/products/:id',[auth, admin],productController.destroy)
+routes.get('/products',auth, productController.index)
+routes.get('/products/:id',auth, productController.show)
 
 
 export default routes

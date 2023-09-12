@@ -18,6 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 global.appRoot = path.resolve(__dirname) // root dir path
+app.use('/uploads',express.static('uploads'))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 app.get('/hello',(req,res)=>{
