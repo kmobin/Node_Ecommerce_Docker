@@ -16,6 +16,9 @@ class CustomeErrorHandler extends Error{
     static unAuthorized(message='Unauthorized'){
         return new CustomeErrorHandler(401,message)
     }
+    static internalServer(message='Internal Server Error'){
+        return new CustomeErrorHandler(500,message)
+    }
 }
 
 export default CustomeErrorHandler
